@@ -1,0 +1,135 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Your Name — Minimalist Space" currentLang="en">
+    <div class="sections-container">
+        <!-- 1. ABOUT 栏目 -->
+        <section id="about" class="section-block">
+            <h2 class="section-heading">About</h2>
+            <div class="bio-text">
+                <p>
+                    Student.
+                </p>
+                <p>
+                    Currently exploring the AI infrastructure.
+                </p>
+            </div>
+        </section>
+
+        <!-- 2. PUBLICATIONS 栏目 -->
+        <section id="publications" class="section-block">
+            <h2 class="section-heading">Selected Publications</h2>
+        </section>
+
+        <!-- 3. PROJECTS 栏目 -->
+        <section id="projects" class="section-block">
+            <h2 class="section-heading">Projects</h2>
+        </section>
+
+        <!-- 4. BLOGS / WRITING 栏目 -->
+        <section id="writing" class="section-block">
+            <h2 class="section-heading">Writing</h2>
+        </section>
+    </div>
+</Layout>
+
+<style>
+    .sections-container {
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+    }
+
+    .section-block {
+        scroll-margin-top: 60px; /* 锚点定位防遮挡留白 */
+    }
+
+    /* About 文字排版 */
+    .bio-text {
+        font-size: 15px;
+        line-height: 1.75;
+        color: var(--text-muted);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .bio-text strong {
+        color: var(--text-main);
+        font-weight: 500;
+    }
+
+    /* Publications 样式 */
+    .item-list { display: flex; flex-direction: column; gap: 20px; }
+    .pub-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border);
+    }
+    .pub-item:last-child { border-bottom: none; }
+    .pub-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+    }
+    .pub-title { font-size: 15px; font-weight: 500; color: #ffffff; }
+    .pub-badge {
+        font-size: 11px;
+        color: #888;
+        font-family: 'Geist Mono', monospace;
+        border: 1px solid var(--border);
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+    .pub-authors { font-size: 13px; color: var(--text-muted); }
+    .pub-authors strong { color: #ddd; font-weight: 500; }
+    .item-links { display: flex; gap: 12px; margin-top: 4px; }
+    .item-links a { font-size: 12px; color: #888; text-decoration: none; transition: color 0.2s; }
+    .item-links a:hover { color: #fff; }
+
+    /* Projects 交互卡片 */
+    .card-link {
+        display: block;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.2s ease;
+    }
+    .card-link:hover {
+        background-color: var(--card-hover);
+        border-color: var(--border);
+        transform: translateX(4px);
+    }
+    .card-title {
+        font-size: 15px;
+        font-weight: 500;
+        color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+    }
+    .card-title .arrow { color: #555; transition: transform 0.2s, color 0.2s; }
+    .card-link:hover .arrow { color: #fff; transform: translate(2px, -2px); }
+    .card-desc { font-size: 13px; color: var(--text-muted); }
+
+    /* Writing 列表 */
+    .post-list { display: flex; flex-direction: column; gap: 4px; }
+    .post-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 12px 10px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: background-color 0.2s, transform 0.2s;
+    }
+    .post-row:hover { background-color: var(--card-hover); transform: translateX(2px); }
+    .post-title { font-size: 15px; color: #ffffff; }
+    .post-date { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; font-family: 'Geist Mono', monospace; }
+    .empty-hint { color: #444; font-size: 13px; }
+</style>

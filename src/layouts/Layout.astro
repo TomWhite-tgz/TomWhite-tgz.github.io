@@ -1,0 +1,262 @@
+---
+interface Props {
+  title?: string;
+  currentLang?: string;
+}
+
+const { title = "Minimalist Space", currentLang = "en" } = Astro.props;
+
+const homeUrl = currentLang === 'en' ? '/' : '/zh';
+const isEn = currentLang === 'en';
+
+const navItems = isEn
+  ? [
+      { name: "About", href: `${homeUrl}#about` },
+      { name: "Publications", href: `${homeUrl}#publications` },
+      { name: "Projects", href: `${homeUrl}#projects` },
+      { name: "Writing", href: `${homeUrl}#writing` },
+    ]
+  : [
+      { name: "关于", href: `${homeUrl}#about` },
+      { name: "发表物", href: `${homeUrl}#publications` },
+      { name: "项目", href: `${homeUrl}#projects` },
+      { name: "随笔文章", href: `${homeUrl}#writing` },
+    ];
+---
+<!DOCTYPE html>
+<html lang={currentLang}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <!-- 引入 Inconsolata 作为 Mac/移动端访问时的 Consolas 极高保真度替补 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/satouriko/LxgwWenKai_Webfonts@v1.101/dist/LXGWWenKai-Regular.css">
+</head>
+<body>
+    <div class="layout-wrapper">
+        <!-- 左侧固定侧边栏 -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <a href={homeUrl} class="brand-block">
+                    <h1 class="brand-name">Your Name</h1>
+                    <p class="brand-title">{isEn ? "Engineer & Researcher" : "开发者 & 研究者"}</p>
+                </a>
+
+                <!-- 绿色终端微光状态灯 -->
+                <div class="status-badge">
+                    <span class="dot"></span>
+                    <span>{isEn ? "Open for new ideas" : "探索新灵感中"}</span>
+                </div>
+
+                <!-- 纵向导航栏 -->
+                <nav class="side-nav">
+                    {navItems.map(item => (
+                        <a href={item.href} class="nav-item">
+                            <span class="nav-prefix">&gt;</span> {item.name}
+                        </a>
+                    ))}
+                </nav>
+            </div>
+
+            <!-- 侧边栏底部 -->
+            <div class="sidebar-bottom">
+                <div class="lang-switcher">
+                    <a href="/" class={isEn ? 'active' : ''}>[EN]</a>
+                    <span class="sep">/</span>
+                    <a href="/zh" class={!isEn ? 'active' : ''}>[中]</a>
+                </div>
+                <div class="social-links">
+                    <a href="https://github.com/yourusername" target="_blank" rel="noreferrer">GitHub</a>
+                    <a href="https://x.com/yourusername" target="_blank" rel="noreferrer">X</a>
+                    <a href="mailto:your-email@example.com">Email</a>
+                </div>
+                <div class="copyright">
+                    © {new Date().getFullYear()}
+                </div>
+            </div>
+        </aside>
+
+        <!-- 中间正文内容区 -->
+        <main class="main-content">
+            <slot />
+        </main>
+    </div>
+</body>
+</html>
+
+<style is:global>
+    :root {
+        --bg: #000000;
+        --text-main: #ededed;
+        --text-muted: #888888;
+        --border: rgba(255, 255, 255, 0.1);
+        --card-hover: rgba(255, 255, 255, 0.04);
+        --code-bg: #0d0d0d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+        background-color: var(--bg);
+        color: var(--text-main);
+        /* 
+           优先 Consolas，
+           非 Windows 系统平滑回退到 Inconsolata / Monaco / Menlo，
+           中文回退到系统黑体
+        */
+        font-family: 'Consolas', 'Inconsolata', 'LXGWWenKai', 'LXGW WenKai', 'Monaco', 'Menlo', 'PingFang SC', 'Microsoft YaHei', monospace;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+        letter-spacing: 0; /* 等宽字体不需要负字距，保持自然间隔 */
+    }
+
+    /* 双栏布局容器 */
+    .layout-wrapper {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 60px 32px;
+        display: flex;
+        gap: 80px;
+        position: relative;
+    }
+
+    /* 左侧 Sidebar 固定 */
+    .sidebar {
+        width: 250px;
+        flex-shrink: 0;
+        height: calc(100vh - 120px);
+        position: sticky;
+        top: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .brand-block { text-decoration: none; color: inherit; }
+    .brand-name { font-size: 20px; font-weight: 600; color: #fff; }
+    .brand-title { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+    /* 状态灯 */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin: 20px 0 32px;
+    }
+    .dot {
+        width: 7px;
+        height: 7px;
+        background-color: #30d158;
+        border-radius: 50%;
+        box-shadow: 0 0 8px rgba(48, 209, 88, 0.7);
+        animation: pulse 2s infinite ease-in-out;
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 0.4; transform: scale(0.9); }
+        50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    /* 纵向导航菜单 */
+    .side-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .nav-item {
+        font-size: 14px;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: all 0.15s ease;
+        display: inline-block;
+        width: fit-content;
+    }
+    .nav-prefix {
+        color: #444;
+        transition: color 0.15s;
+    }
+    .nav-item:hover {
+        color: #ffffff;
+        transform: translateX(4px);
+    }
+    .nav-item:hover .nav-prefix {
+        color: #30d158; /* 悬浮时小箭头变绿，极客彩蛋 */
+    }
+
+    /* 侧边栏底部 */
+    .sidebar-bottom {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    .lang-switcher {
+        font-size: 13px;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+    .lang-switcher a { color: #555; text-decoration: none; transition: color 0.2s; }
+    .lang-switcher a:hover { color: #aaa; }
+    .lang-switcher a.active { color: #fff; cursor: default; }
+    .lang-switcher .sep { color: #333; }
+
+    .social-links { display: flex; gap: 14px; font-size: 13px; }
+    .social-links a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .social-links a:hover { color: #fff; }
+    .copyright { font-size: 12px; color: #444; }
+
+    /* 中间正文区域 */
+    .main-content {
+        flex: 1;
+        max-width: 680px;
+        min-width: 0;
+    }
+
+    /* 栏目标题 */
+    h2.section-heading {
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #666666;
+        margin-bottom: 24px;
+        font-weight: 600;
+    }
+
+    /* Markdown 博客长文排版 */
+    .markdown-body { line-height: 1.75; font-size: 15px; color: #cccccc; }
+    .markdown-body h1 { font-size: 24px; color: #fff; margin-bottom: 24px; font-weight: 600; }
+    .markdown-body h2 { font-size: 18px; color: #fff; margin: 32px 0 16px; }
+    .markdown-body p { margin-bottom: 20px; }
+    .markdown-body a { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+    .markdown-body pre { background: var(--code-bg); border: 1px solid var(--border); padding: 16px; border-radius: 6px; margin: 20px 0; overflow-x: auto; font-size: 13px; }
+    .markdown-body code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+    .markdown-body pre code { background: none; padding: 0; }
+    .markdown-body blockquote { border-left: 2px solid #333; padding-left: 16px; color: var(--text-muted); margin: 20px 0; }
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+        .layout-wrapper {
+            flex-direction: column;
+            gap: 40px;
+            padding: 40px 20px;
+        }
+        .sidebar {
+            width: 100%;
+            height: auto;
+            position: static;
+            gap: 24px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 30px;
+        }
+        .side-nav {
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+    }
+</style>
