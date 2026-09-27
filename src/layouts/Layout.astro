@@ -11,16 +11,56 @@ const isEn = currentLang === 'en';
 
 const navItems = isEn
   ? [
-      { name: "About", href: `${homeUrl}#about` },
-      { name: "Publications", href: `${homeUrl}#publications` },
-      { name: "Projects", href: `${homeUrl}#projects` },
-      { name: "Writing", href: `${homeUrl}#writing` },
+      {
+        name: "About",
+        href: `${homeUrl}#about`,
+        expandable: false,
+        preview: { texts: [], links: [] },
+      },
+      {
+        name: "Publications",
+        href: `${homeUrl}#publications`,
+        expandable: false,
+        preview: { texts: [], links: [] },
+      },
+      {
+        name: "Projects",
+        href: `${homeUrl}#projects`,
+        expandable: false,
+        preview: { texts: [], links: [] },
+      },
+      {
+        name: "Writing",
+        href: `${homeUrl}#writing`,
+        expandable: true,
+        preview: { texts: [], links: [{ name: "Newman projection and Fischer projection", href: "/posts/chem/organic/Fischer/" }] },
+      },
     ]
   : [
-      { name: "关于", href: `${homeUrl}#about` },
-      { name: "发表物", href: `${homeUrl}#publications` },
-      { name: "项目", href: `${homeUrl}#projects` },
-      { name: "随笔文章", href: `${homeUrl}#writing` },
+      {
+        name: "关于",
+        href: `${homeUrl}#about`,
+        expandable: false,
+        preview: { texts: [], links: [] },
+      },
+      {
+        name: "发表物",
+        href: `${homeUrl}#publications`,
+        expandable: false,
+        preview: { texts: [], links: [] },
+      },
+      {
+        name: "项目",
+        href: `${homeUrl}#projects`,
+        expandable: false,
+        preview: { texts: [], links: [] },
+      },
+      {
+        name: "随笔文章",
+        href: `${homeUrl}#writing`,
+        expandable: true,
+        preview: { texts: [], links: [{ name: "Newman 投影与 Fischer 投影", href: "/zh/posts/chem/organic/Fischer/" }] },
+      },
     ];
 ---
 <!DOCTYPE html>
@@ -54,9 +94,20 @@ const navItems = isEn
                 <!-- 纵向导航栏 -->
                 <nav class="side-nav">
                     {navItems.map(item => (
-                        <a href={item.href} class="nav-item">
-                            <span class="nav-prefix">&gt;</span> {item.name}
-                        </a>
+                        <div class="nav-group">
+                            <div class="nav-item-row">
+                                {item.expandable ? (
+                                    <button class="nav-toggle" type="button" aria-expanded="false" aria-label={isEn ? `Expand ${item.name}` : `展开${item.name}`}>
+                                        <span class="nav-prefix">&gt;</span>
+                                    </button>
+                                ) : <span class="nav-prefix nav-prefix-static">&gt;</span>}
+                                <a href={item.href} class="nav-item">{item.name}</a>
+                            </div>
+                            {item.expandable && <div class="nav-preview" hidden>
+                                {item.preview.texts.map(text => <span>{text}</span>)}
+                                {item.preview.links.map(link => <a href={link.href}>{link.name}</a>)}
+                            </div>}
+                        </div>
                     ))}
                 </nav>
             </div>
@@ -86,6 +137,20 @@ const navItems = isEn
     </div>
 </body>
 </html>
+
+<script>
+    document.querySelectorAll('.nav-toggle').forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            const group = toggle.closest('.nav-group');
+            const preview = group?.querySelector('.nav-preview');
+            if (!preview) return;
+
+            const expanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', String(!expanded));
+            preview.toggleAttribute('hidden', expanded);
+        });
+    });
+</script>
 
 <style is:global>
     :root {
@@ -168,6 +233,25 @@ const navItems = isEn
         flex-direction: column;
         gap: 12px;
     }
+    .nav-group { display: flex; flex-direction: column; gap: 8px; }
+    .nav-item-row { display: flex; align-items: center; gap: 6px; }
+    .nav-toggle {
+        width: 14px;
+        height: 20px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #444;
+        cursor: pointer;
+    }
+    .nav-toggle .nav-prefix {
+        display: inline-block;
+        transition: color 0.15s, transform 0.15s;
+    }
+    .nav-toggle:hover .nav-prefix,
+    .nav-toggle[aria-expanded="true"] .nav-prefix { color: #30d158; }
+    .nav-toggle[aria-expanded="true"] .nav-prefix { transform: rotate(90deg); }
+    .nav-prefix-static { color: #444; }
     .nav-item {
         font-size: 14px;
         color: var(--text-muted);
@@ -176,17 +260,23 @@ const navItems = isEn
         display: inline-block;
         width: fit-content;
     }
-    .nav-prefix {
-        color: #444;
-        transition: color 0.15s;
-    }
     .nav-item:hover {
         color: #ffffff;
         transform: translateX(4px);
     }
-    .nav-item:hover .nav-prefix {
-        color: #30d158; /* 悬浮时小箭头变绿，极客彩蛋 */
+    .nav-preview {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-left: 20px;
+        padding-left: 10px;
+        border-left: 1px solid var(--border);
+        color: #666;
+        font-size: 12px;
+        line-height: 1.5;
     }
+    .nav-preview a { color: #888; text-decoration: none; }
+    .nav-preview a:hover { color: #fff; }
 
     /* 侧边栏底部 */
     .sidebar-bottom {
@@ -228,7 +318,7 @@ const navItems = isEn
     }
 
     /* Markdown 博客长文排版 */
-    .markdown-body { line-height: 1.75; font-size: 15px; color: #cccccc; }
+    .markdown-body { line-height: 1.75; font-size: 15px; color: #cccccc; font-family: 'LXGWWenKai', 'LXGW WenKai', sans-serif; }
     .markdown-body h1 { font-size: 24px; color: #fff; margin-bottom: 24px; font-weight: 600; }
     .markdown-body h2 { font-size: 18px; color: #fff; margin: 32px 0 16px; }
     .markdown-body p { margin-bottom: 20px; }
