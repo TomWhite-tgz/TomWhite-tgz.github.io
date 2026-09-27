@@ -30,6 +30,12 @@ import Layout from '../layouts/Layout.astro';
         <!-- 4. BLOGS / WRITING 栏目 -->
         <section id="writing" class="section-block">
             <h2 class="section-heading">Writing</h2>
+            <div class="post-list">
+                <a class="post-row" href="/posts/chem/organic/Fischer/">
+                    <span class="post-title">Newman projection and Fischer projection</span>
+                    <span class="post-date">2026-09-27</span>
+                </a>
+            </div>
         </section>
     </div>
 </Layout>
@@ -127,9 +133,10 @@ import Layout from '../layouts/Layout.astro';
         border-radius: 6px;
         text-decoration: none;
         transition: background-color 0.2s, transform 0.2s;
+        font-family: 'LXGWWenKai', 'LXGW WenKai', sans-serif;
     }
     .post-row:hover { background-color: var(--card-hover); transform: translateX(2px); }
     .post-title { font-size: 15px; color: #ffffff; }
-    .post-date { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; font-family: 'Geist Mono', monospace; }
+    .post-date { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; font-family: inherit; }
     .empty-hint { color: #444; font-size: 13px; }
 </style>

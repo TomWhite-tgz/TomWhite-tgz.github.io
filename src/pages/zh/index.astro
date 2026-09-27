@@ -30,6 +30,12 @@ import Layout from '../../layouts/Layout.astro';
         <!-- 4. 随笔 -->
         <section id="writing" class="section-block">
             <h2 class="section-heading">文章与随笔</h2>
+            <div class="post-list">
+                <a class="post-row" href="/zh/posts/chem/organic/Fischer/">
+                    <span class="post-title">Newman 投影与 Fischer 投影</span>
+                    <span class="post-date">2026-09-27</span>
+                </a>
+            </div>
         </section>
     </div>
 </Layout>
@@ -57,9 +63,9 @@ import Layout from '../../layouts/Layout.astro';
     .card-link:hover .arrow { color: #fff; transform: translate(2px, -2px); }
     .card-desc { font-size: 13px; color: var(--text-muted); }
     .post-list { display: flex; flex-direction: column; gap: 4px; }
-    .post-row { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 10px; border-radius: 6px; text-decoration: none; transition: background-color 0.2s, transform 0.2s; }
+    .post-row { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 10px; border-radius: 6px; text-decoration: none; transition: background-color 0.2s, transform 0.2s; font-family: 'LXGWWenKai', 'LXGW WenKai', sans-serif; }
     .post-row:hover { background-color: var(--card-hover); transform: translateX(2px); }
     .post-title { font-size: 15px; color: #ffffff; }
-    .post-date { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; font-family: 'Geist Mono', monospace; }
+    .post-date { font-size: 13px; color: var(--text-muted); font-variant-numeric: tabular-nums; font-family: inherit; }
     .empty-hint { color: #444; font-size: 13px; }
 </style>
